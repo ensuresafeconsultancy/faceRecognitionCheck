@@ -1,0 +1,37 @@
+
+router.post("/uploadImage" , upload.single('image') , async (req, res) => {
+
+    try{
+
+
+        // console.log("req.body.image = " ,req.body )
+
+        const base64Parts = req.body.image.split(',');
+        const contentType = base64Parts[0].split(':')[1].split(';')[0].trim();
+        const imageData = base64Parts[1];
+        
+        const fs = require('fs').promises;
+        const { PNG } = require('pngjs');
+        
+        const buffer = Buffer.from(imageData, 'base64');
+        
+        // Parse the buffer as a PNG
+        const pngImage = PNG.sync.read(buffer);
+        
+        // Generate a unique filename and path for the PNG image
+        const signFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.png`;
+        const signFilePath = `files/${signFilename}`;
+        
+        // Write the PNG image buffer to a file
+        await fs.writeFile(signFilePath, PNG.sync.write(pngImage));
+
+        console.log("success")
+
+
+
+    }catch(err){
+        res.send("something wrong sryyyyyyyyyyyyyy")
+    }
+
+
+})
