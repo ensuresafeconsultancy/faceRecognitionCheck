@@ -12,7 +12,6 @@ const Recognition = () => {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [userDescriptor, setUserDescriptor] = useState([]);
 
-
   const fetchEmpNames = async()=>{
     const response = await axios.get("https://facerecognitioncheck.onrender.com/fetchEmployeeNames");
     // const response = await axios.get("http://localhost:3000/fetchEmployeeNames");
