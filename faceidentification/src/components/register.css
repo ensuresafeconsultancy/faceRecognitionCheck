@@ -1,0 +1,11 @@
+.videoCanva{
+    width: 620px;
+    height: 520px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 450px) {
+    .videoCanva{
+        width: 320px;
+        height: 276px;
+    }
+}

@@ -4,6 +4,7 @@
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import './register.css'
 
 const Register = () => {
   const [image, setImage] = useState(null);
@@ -126,8 +127,9 @@ const Register = () => {
                     <button className='btn btn-primary' type='button' onClick={openCamera}>Open Camera</button>
                   )}
                   {isCameraOpen && (
-                    <div >
-                      <video ref={videoRef} autoPlay width="720" height="560"></video>
+                    <div>
+                      <video ref={videoRef} autoPlay className='videoCanva'></video>
+                      {/* <video ref={videoRef} autoPlay className='videoCanva' width="720" height="560"></video> */}
                       {/* <video ref={videoRef} autoPlay className='img-fluid'></video> */}
                       <button className='btn btn-primary' type='button' onClick={captureImage} style={{ display: 'block', marginTop: '10px' }}>Capture Image</button>
                     </div>
