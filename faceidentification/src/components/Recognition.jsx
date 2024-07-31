@@ -94,7 +94,7 @@ const Recognition = () => {
 
           const distance = faceapi.euclideanDistance(faceDescriptor, userDescriptor);
           console.log("distance = " , distance)
-          if (distance < 0.37) { // Adjust the threshold as needed
+          if (distance <= 0.5) { // Adjust the threshold as needed
             clearInterval(intervalId);
             if (videoRef.current && videoRef.current.srcObject) {
               videoRef.current.srcObject.getTracks().forEach(track => track.stop());
@@ -164,7 +164,8 @@ const Recognition = () => {
             )}
             {isCameraOn && (
               <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <video ref={videoRef} autoPlay muted className='img-fluid'></video>
+                {/* <video ref={videoRef} autoPlay muted width="720" height="560"></video> */}
+                <video ref={videoRef} autoPlay muted width="720" height="560"></video>
                 {/* <video ref={videoRef} autoPlay muted className='videoCanva' width="720" height="560" style={{ marginRight: '20px' }}></video> */}
                 <div ref={canvasRef} style={{ position: 'absolute' }}></div>
               </div>

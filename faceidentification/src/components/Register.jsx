@@ -127,7 +127,8 @@ const Register = () => {
                   )}
                   {isCameraOpen && (
                     <div >
-                      <video ref={videoRef} autoPlay className='img-fluid'></video>
+                      <video ref={videoRef} autoPlay width="720" height="560"></video>
+                      {/* <video ref={videoRef} autoPlay className='img-fluid'></video> */}
                       <button className='btn btn-primary' type='button' onClick={captureImage} style={{ display: 'block', marginTop: '10px' }}>Capture Image</button>
                     </div>
                   )}
