@@ -5,7 +5,7 @@
 
 @media only screen and (min-width: 320px) and (max-width: 450px) {
     .videoCanva{
-        width: 320px;
+        width: 100%;
         height: 276px;
     }
 }
