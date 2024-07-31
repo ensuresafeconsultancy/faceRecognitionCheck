@@ -14,7 +14,8 @@ const Recognition = () => {
 
 
   const fetchEmpNames = async()=>{
-    const response = await axios.get("http://localhost:3000/fetchEmployeeNames");
+    const response = await axios.get("https://facerecognitioncheck.onrender.com/fetchEmployeeNames");
+    // const response = await axios.get("http://localhost:3000/fetchEmployeeNames");
     if(response){
       console.log(response);
       setEmployees(response.data.EmployeeNames);
@@ -24,7 +25,7 @@ const Recognition = () => {
   const selectEmployeeFace = async(event)=>{
     console.log("event = " , event.target.value)
     if(event.target.value){
-      const response = await axios.get(`http://localhost:3000/employeeDescriptor/${event.target.value}`)
+      const response = await axios.get(`https://facerecognitioncheck.onrender.com/employeeDescriptor/${event.target.value}`)
       if(response){
         console.log("response = " , response.data.userDescriptor)
         setUserDescriptor(response.data.userDescriptor);

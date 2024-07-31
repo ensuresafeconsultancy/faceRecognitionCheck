@@ -45,7 +45,7 @@ const Register = () => {
 
   const sendImgBackend = async (event) => {
     event.preventDefault();
-    let url = "http://localhost:3000/uploadSingleImage"
+    let url = "https://facerecognitioncheck.onrender.com/uploadSingleImage"
     const newFormData = new FormData();
     newFormData.append('image', dataURItoBlob(image), `${employeeName.replace(/\s+/g, '')}.png`);
     newFormData.append('name', employeeName); // Change as needed for registration
