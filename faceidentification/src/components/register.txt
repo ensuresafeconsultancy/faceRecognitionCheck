@@ -1,23 +1,48 @@
+
+
+
 import axios from 'axios';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import Webcam from 'react-webcam';
-import './register.css';
+import './register.css'
 
 const Register = () => {
   const [image, setImage] = useState(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const webcamRef = useRef(null);
+  const videoRef = useRef();
   const canvasRef = useRef();
-  const [employeeName, setEmployeeName] = useState('');
+
+  const [employeeName , setEmployeeName] = useState('');
+
+  useEffect(() => {
+    if (isCameraOpen) {
+      // Access the webcam
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          videoRef.current.srcObject = stream;
+        })
+        .catch(err => console.error('Error accessing webcam: ', err));
+    }
+
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.srcObject?.getTracks().forEach(track => track.stop());
+      }
+    };
+    
+  }, [isCameraOpen]);
 
   const openCamera = () => {
     setIsCameraOpen(true);
   };
 
   const captureImage = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    const imageDataURL = canvas.toDataURL('image/png');
+    setImage(imageDataURL);
+    videoRef.current.srcObject.getTracks().forEach(track => track.stop());
     setIsCameraOpen(false);
   };
 
@@ -28,10 +53,10 @@ const Register = () => {
 
   const sendImgBackend = async (event) => {
     event.preventDefault();
-    let url = "https://facerecognitioncheck.onrender.com/uploadSingleImage";
+    let url = "https://facerecognitioncheck.onrender.com/uploadSingleImage"
     const newFormData = new FormData();
     newFormData.append('image', dataURItoBlob(image), `${employeeName.replace(/\s+/g, '')}.png`);
-    newFormData.append('name', employeeName);
+    newFormData.append('name', employeeName); // Change as needed for registration
 
     try {
       Swal.fire({
@@ -101,37 +126,36 @@ const Register = () => {
             <form action="" className='px-2' onSubmit={sendImgBackend}>
               <div className="form-group">
                 <label htmlFor="">Employee Name: </label>
-                <input type="text" className='form-control' onChange={(e) => setEmployeeName(e.target.value)} required />
+                <input type="text" className='form-control' onChange={(e)=>setEmployeeName(e.target.value)} required />
               </div>
-              <div className="pt-5">
+              <div className="pt-5 ">
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   {!isCameraOpen && !image && (
                     <button className='btn btn-primary' type='button' onClick={openCamera}>Open Camera</button>
                   )}
                   {isCameraOpen && (
                     <div>
-                      <Webcam
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        width={720}
-                        height={560}
-                        className='videoCanva'
-                      />
+                      <video ref={videoRef} autoPlay className='videoCanva'></video>
+                      {/* <video ref={videoRef} autoPlay className='videoCanva' width="720" height="560"></video> */}
+                      {/* <video ref={videoRef} autoPlay className='img-fluid'></video> */}
                       <button className='btn btn-primary' type='button' onClick={captureImage} style={{ display: 'block', marginTop: '10px' }}>Capture Image</button>
                     </div>
                   )}
                   {image && (
                     <div>
                       <h2>Captured Image</h2>
-                      <img src={image} alt="Captured" />
+                      <img src={image} alt="Captured"  />
                       <button className='btn btn-primary' type='button' onClick={retakeImage} style={{ display: 'block', marginTop: '10px' }}>Retake</button>
                     </div>
                   )}
                 </div>
                 <canvas ref={canvasRef} className='img-fluid' style={{ display: 'none' }}></canvas>
-                <button className='btn btn-success ms-3'>Register</button>
+
+                {/* <button className='btn btn-primary' type='submit' onClick={() => sendImgBackend('http://localhost:3000/uploadSingleImage')}>Register</button> */}
+                {/* <button type='button' onClick={() => sendImgBackend('http://localhost:3000/recognizeSingle')}>Recognize</button> */}
+                <button className='btn btn-success ms-3' >Register</button>
               </div>
+
             </form>
           </div>
           <div className="col"></div>
@@ -140,6 +164,6 @@ const Register = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Register;
